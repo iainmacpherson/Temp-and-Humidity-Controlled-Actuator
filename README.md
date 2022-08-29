@@ -1,30 +1,22 @@
 # Temp-and-Humidity-Controlled-Actuator
-DHT11 Sensor capable of:
-20-80% humidity readings with 5% accuracy
-0-50°C temperature readings ±2°C accuracy
 
-Required Components:
-12VDC Power Supply (https://www.progressiveautomations.com/products/ps-20-12)
-Arduino Uno (https://www.progressiveautomations.com/products/lc-066)
-Temperature and Humidity Sensor (https://www.progressiveautomations.com/products/lc-226)
-2 Channel Relay (https://www.progressiveautomations.com/products/lc-200)
-Actuator (12VDC with max. 10A current draw) (https://www.progressiveautomations.com/pages/mini-linear-actuators)
-USB Cable Type A/B
-Jumper Wires
+## Description
+Using an arduino, control a linear actuator based on the temperature and humidity detected by a connected sensor.
 
-Connections:
-Sensor + - Arduino 5V
-Sensor - - Arduino GND
-Sensor OUT - Pin 2
-Arduino Pin 7 - Relay IN1
-Arduino Pin 8 - Relay IN2
-Arduino 5V - Relay VCC
-Arduino GND - Relay GND
-Relay NO2 - -12VDC
-Relay NC2 - +12VDC
-Relay NC1 - Relay NC2
-Relay NO1 - Relay NO2
-Actuator Positive - Relay COM1
-Actuator Nagative - Relay COM2
+### Components:
+* 12VDC Power Supply
+* Arduino Uno
+* 2 Channel Relay
+* Temperature and Humidity Sensor. ([Product page](https://www.progressiveautomations.com/products/lc-226))
+* Actuator (12VDC with max. 10A current draw). ([Product page](https://www.progressiveautomations.com/products/linear-actuator-with-potentiometer?variant=18277322293315))
 
--Guninder M
+### Wiring diagram
+![Wiring diagram](https://cdn.shopify.com/s/files/1/0061/7735/7891/files/programming-arduino.jpg?v=1626174435)
+_Image from the project by progressive automations detailed_ [here](https://www.progressiveautomations.com/blogs/how-to/how-to-control-your-actuator-using-an-arduino-with-a-digital-temperature-and-humidity-sensor).
+
+### Required Libraries:
+* [DHT sensor library](https://www.arduino.cc/reference/en/libraries/dht-sensor-library/)
+
+## Functionality
+
+
