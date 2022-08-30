@@ -20,6 +20,9 @@ _Image from the project by Progressive Automations detailed_ [here](https://www.
 ## Project Files
 * `binary_actuation.ino` is the example provided by Progressive Automations. It extends or contracts the
 actuator between fully open and fully closed in response to a comparison with a heat index threshold.
+* `feedback_actuator.ino` is an implementation that uses the temperature and humidity sensor as feedback for
+actuator, driving it in the direction so as to reduce the error between the measured temperature and humidity
+and the target temperature and humidity.
 
 ## Functionality
 The actuator is controlled with a negative feedback loop and make it settle in some intermediate

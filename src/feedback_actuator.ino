@@ -10,6 +10,9 @@
 #define RELAY1_PIN 7
 #define RELAY2_PIN 8
 
+// measured time to go from fully retracted to fully extended.
+#define FULL_TRANSITION 21800
+
 /*=============================================================================
     Helper Functions
  *=============================================================================*/
@@ -47,7 +50,8 @@ SensorData getSensorData(DHT dht) {
 int computeAdjustment(SensorData d) {
   // TODO: actually implement this
   // testing code
-  static int adjustment = -1000;
+  // alternate between fully open and fully closed
+  static int adjustment = -FULL_TRANSITION;
   adjustment = -adjustment;
   return adjustment;
 }
@@ -109,11 +113,14 @@ void setup() {
 */
 
 /* Tuning Parameters:
-    step magnitude - how much to move per step?
+    step_resolution - how many steps between open and closed
     update_interval - how frequently is the sensor checked and updated.
 */
+int step_resolution = 100;
+int step_time = FULL_TRANSITION/step_resolution;
+
+int update_interval = 500;
 void loop() {
-  int update_interval = 500; // the time between updates in ms
   // read new data from the sensor
   SensorData data = getSensorData(dht);
   if (data == null) return
