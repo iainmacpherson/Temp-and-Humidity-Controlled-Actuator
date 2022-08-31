@@ -13,6 +13,12 @@
 // measured time to go from fully retracted to fully extended.
 #define FULL_TRANSITION 21800
 
+// Struct to hold the useful sensor data
+typedef struct {
+  float humidity;
+  float temperature;
+} SensorData;
+
 /*=============================================================================
     Helper Functions
  *=============================================================================*/
@@ -25,29 +31,22 @@ void serialLogData(float h, float t) {
   Serial.println(F("°C "));
 }
 
-
-// Struct to hold the useful sensor data
-typedef struct {
-  float humidity;
-  float temperature;
-} SensorData;
-
-// Read data from the sensor and return the data in a SensorData struct
-SensorData getSensorData(DHT dht) {
-  SensorData result;
-
-  float h = dht.readHumidity();  //reads humidity
-  float t = dht.readTemperature(); //reads temperature
-
-  if (isnan(h) || isnan(t)) {
-    Serial.println(F("[SENSOR]: Failed to read from DHT sensor!"));
-    return null;
-  }
-  return result;
+inline void actuator_retract() {
+    digitalWrite(RELAY1_PIN, LOW);
+    digitalWrite(RELAY2_PIN, HIGH);
 }
 
+inline void actuator_extend() {
+    digitalWrite(RELAY1_PIN, HIGH);
+    digitalWrite(RELAY2_PIN, LOW);
+}
 
-int computeAdjustment(SensorData d) {
+inline void actuator_off() {
+    digitalWrite(RELAY1_PIN, LOW);
+    digitalWrite(RELAY2_PIN, LOW);
+}
+
+inline int computeAdjustment(SensorData d) {
   // TODO: actually implement this
   // testing code
   // alternate between fully open and fully closed
@@ -59,18 +58,14 @@ int computeAdjustment(SensorData d) {
 void makeAdjustment(int adjustment) {
   if (adjustment < 0) {
     // retract the actuator for that number of miliseconds
-    digitalWrite(relay_1, LOW);
-    digitalWrite(relay_2, HIGH);
+    actuator_retract();
     delay(adjustment);
-    digitalWrite(relay_1, LOW);
-    digitalWrite(relay_2, LOW);
+    actuator_off();
   } else if (adjustment > 0) {
     // extend the actuator for that number of miliseconds
-    digitalWrite(relay_1, HIGH);
-    digitalWrite(relay_2, LOW);
+    actuator_extend();
     delay(adjustment);
-    digitalWrite(relay_1, LOW);
-    digitalWrite(relay_2, LOW);
+    actuator_off();
   } else {
     // do nothing
     return;
@@ -98,8 +93,7 @@ void setup() {
   pinMode(RELAY2_PIN, OUTPUT);
 
   // start with both relays off
-  digitalWrite(RELAY1_PIN, LOW);
-  digitalWrite(RELAY2_PIN, LOW);
+  actuator_off();
 }
 
 /*=============================================================================
@@ -121,9 +115,16 @@ int step_time = FULL_TRANSITION/step_resolution;
 
 int update_interval = 500;
 void loop() {
-  // read new data from the sensor
-  SensorData data = getSensorData(dht);
-  if (data == null) return
+  // read and check sensor data
+  SensorData data;
+  data.humidity = dht.readHumidity();  //reads humidity
+  data.temperature = dht.readTemperature(); //reads temperature
+
+  if (isnan(data.humidity) || isnan(data.temperature)) {
+    Serial.println(F("[SENSOR]: Failed to read from DHT sensor!"));
+    return;
+  }
+
   // print data to the console
   serialLogData(data.humidity, data.temperature);
 
