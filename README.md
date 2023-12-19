@@ -1,5 +1,7 @@
 # Temp-and-Humidity-Controlled-Actuator
 
+_Note: this project was just to mess around with the hardware, it is not finished and not likely to be._
+
 ## Description
 Using an arduino, control a linear actuator based on the temperature and humidity detected by a connected sensor.
 
